@@ -10,14 +10,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build PWA to APK
-        uses: pwa-builder/pwa-auth@v1.1
+      - name: Build Android APK
+        uses: pwa-builder/pwa-starter-action@v1.3
         with:
-          # Configurações básicas para TWA
           pwa-url: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
           android-package-id: "com.jfl.gigawall"
           android-app-name: "Giga Wall JFL"
-      - name: Upload APK
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: giga-wall-apk
