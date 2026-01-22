@@ -1,9 +1,9 @@
 # Giga Wall JFL
 
-Plataforma digital independente.
+Sistema de gestão multimédia independente.
 
-## Como gerar o APK
+## Como gerar o APK Instalável
 
-1. Ative o **GitHub Pages** nas configurações do repo.
-2. Vá em **Actions** > **Build Android APK**.
-3. Clique em **Run workflow**.
+1. Ative o **GitHub Pages** (Settings > Pages) apontando para o root.
+2. Aguarde o deploy terminar (o site deve estar online).
+3. Vá em **Actions** > **Build Android APK** > **Run workflow**.
