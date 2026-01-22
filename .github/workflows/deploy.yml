@@ -1,0 +1,11 @@
+# .github/workflows/deploy.yml
+on:
+  repository_dispatch:
+    types: [giga_wall_deploy]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploying Project...
+        run: echo "Plataforma Giga Wall disparada com sucesso!"
