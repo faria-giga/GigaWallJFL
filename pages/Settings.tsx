@@ -25,8 +25,8 @@ import {
   FileCode,
   FileText,
   Play,
-  // Fix: Adding missing 'X' icon from lucide-react
-  X
+  X,
+  AlertCircle
 } from 'lucide-react';
 import { storage } from '../services/storageService';
 
@@ -154,21 +154,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Build PWA to APK
-        uses: pwa-builder/pwa-auth@v1.1
+      - name: Build Android APK
+        uses: pwa-builder/pwa-starter-action@v1.3
         with:
-          # Configurações básicas para TWA
           pwa-url: "https://\${{ github.repository_owner }}.github.io/\${{ github.event.repository.name }}/"
           android-package-id: "com.jfl.gigawall"
           android-app-name: "Giga Wall JFL"
-      - name: Upload APK
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: giga-wall-apk
           path: ./*.apk
 `;
 
-    const readmeMd = `# Giga Wall JFL\n\nPlataforma digital independente para publicação, gestão e distribuição de conteúdos multimédia e arquivos digitais.\n\n## Como executar\n\nEste projeto é um PWA estático. Basta abrir o \`index.html\` em um servidor web.\n\n## GitHub Actions\n\n- **Deploy**: Automático via GitHub Pages.\n- **Android APK**: Vá na aba 'Actions' e execute o workflow 'Build Android APK' para gerar seu arquivo instalável.`;
+    const readmeMd = `# Giga Wall JFL\n\nPlataforma digital independente.\n\n## Como gerar o APK\n\n1. Ative o **GitHub Pages** nas configurações do repo.\n2. Vá em **Actions** > **Build Android APK**.\n3. Clique em **Run workflow**.`;
 
     const filesToSync = [
       { path: 'index.html', url: './index.html' },
@@ -212,31 +211,29 @@ jobs:
           const response = await fetch(file.url);
           contentToUpload = await response.text();
         }
-        
-        const success = await uploadFile(file.path, contentToUpload, `Deploy total via Giga Wall JFL - ${file.path}`);
+        const success = await uploadFile(file.path, contentToUpload, `Fix build: update to pwa-starter-action - ${file.path}`);
         if (success) successCount++;
       } catch (e) { addLog(`Falha em ${file.path}`, 'error'); }
     }
 
     if (successCount === filesToSync.length) {
-      addLog("SISTEMA SINCRONIZADO E CONFIGURADO PARA APK!", "success");
+      addLog("SISTEMA SINCRONIZADO COM ACTIONS CORRIGIDAS!", "success");
     } else {
-      addLog(`Concluído com avisos: ${successCount}/${filesToSync.length} arquivos enviados.`, "info");
+      addLog(`Sync parcial: ${successCount}/${filesToSync.length} arquivos enviados.`, "info");
     }
     setIsFullSyncing(false);
   };
 
   const handleTriggerApkBuild = async () => {
     setIsBuildingApk(true);
-    addLog("Solicitando geração de APK ao GitHub Actions...", "info");
+    addLog("Disparando build corrigida no GitHub...", "info");
     try {
       await githubRequest('/dispatches', 'POST', {
         event_type: 'build-apk'
       });
-      addLog("Build solicitada com sucesso!", "success");
-      addLog("Vá para a aba 'Actions' do seu repositório para acompanhar o progresso.", "info");
+      addLog("Build iniciada! Verifique a aba 'Actions' no GitHub.", "success");
     } catch (err: any) {
-      addLog(`Erro ao disparar build: ${err.message}`, "error");
+      addLog(`Erro: ${err.message}`, "error");
     } finally {
       setIsBuildingApk(false);
     }
@@ -258,19 +255,19 @@ jobs:
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-12 py-10 animate-in fade-in duration-700 px-4 pb-24">
+    <div className="max-w-5xl mx-auto space-y-12 py-10 px-4 pb-24">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h1 className="text-4xl font-black flex items-center gap-4 italic">
             <SettingsIcon size={36} className="text-blue-500" /> Sistema
           </h1>
-          <p className="text-gray-500 mt-2 font-medium">Gestão técnica e distribuição nativa do Giga Wall.</p>
+          <p className="text-gray-500 mt-2 font-medium">Gestão técnica e distribuição nativa.</p>
         </div>
         
         <div className="flex p-1 bg-gray-900/50 border border-gray-800 rounded-2xl">
-          <button onClick={() => setActiveTab('general')} className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'general' ? 'bg-gray-800 text-white' : 'text-gray-500'}`}>Geral</button>
-          <button onClick={() => setActiveTab('hosting')} className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'hosting' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-500'}`}>Hospedagem</button>
-          <button onClick={() => setActiveTab('mobile')} className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeTab === 'mobile' ? 'bg-emerald-600 text-white shadow-lg' : 'text-gray-500'}`}>Mobile & APK</button>
+          <button onClick={() => setActiveTab('general')} className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase transition-all ${activeTab === 'general' ? 'bg-gray-800 text-white' : 'text-gray-500'}`}>Geral</button>
+          <button onClick={() => setActiveTab('hosting')} className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase transition-all ${activeTab === 'hosting' ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-500'}`}>Hospedagem</button>
+          <button onClick={() => setActiveTab('mobile')} className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase transition-all ${activeTab === 'mobile' ? 'bg-emerald-600 text-white shadow-lg' : 'text-gray-500'}`}>Mobile & APK</button>
         </div>
       </div>
 
@@ -280,42 +277,30 @@ jobs:
             <div className="bg-[#111] border border-gray-800 rounded-[2.5rem] p-8 space-y-8 shadow-2xl animate-in slide-in-from-left-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-xl font-black flex items-center gap-3 text-white"><Github /> GitHub Config</h3>
-                <div className="flex bg-black border border-gray-800 p-1 rounded-xl">
-                   <button onClick={() => setIsPrivate(false)} className={`px-4 py-1 rounded-lg text-[9px] font-black uppercase ${!isPrivate ? 'bg-blue-600 text-white' : 'text-gray-500'}`}>Público</button>
-                   <button onClick={() => setIsPrivate(true)} className={`px-4 py-1 rounded-lg text-[9px] font-black uppercase ${isPrivate ? 'bg-emerald-600 text-white' : 'text-gray-500'}`}>Privado</button>
-                </div>
               </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">URL do Repositório</label>
-                  <div className="bg-black/40 border border-gray-800 rounded-2xl p-4 flex items-center">
-                    <LinkIcon size={18} className="text-gray-600 mr-3" />
-                    <input type="text" value={repoUrl} onChange={(e) => setRepoUrl(e.target.value)} placeholder="https://github.com/usuario/repo" className="bg-transparent border-none focus:outline-none text-sm font-mono text-blue-400 w-full" />
-                  </div>
+                  <input type="text" value={repoUrl} onChange={(e) => setRepoUrl(e.target.value)} placeholder="https://github.com/usuario/repo" className="w-full bg-black/40 border border-gray-800 rounded-2xl p-4 text-sm font-mono text-blue-400 focus:outline-none" />
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest">PAT Token</label>
                   <div className="relative">
-                    <input type={showToken ? "text" : "password"} value={token} onChange={(e) => setToken(e.target.value)} placeholder="ghp_xxxxxxxxxxxx" className="w-full bg-black/40 border border-gray-800 rounded-2xl py-4 pl-12 text-sm font-mono text-emerald-400 outline-none focus:border-emerald-500/50" />
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-600" size={18} />
+                    <input type={showToken ? "text" : "password"} value={token} onChange={(e) => setToken(e.target.value)} placeholder="ghp_xxxxxxxxxxxx" className="w-full bg-black/40 border border-gray-800 rounded-2xl py-4 px-4 text-sm font-mono text-emerald-400 outline-none" />
                     <button onClick={() => setShowToken(!showToken)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600">{showToken ? <EyeOff size={18} /> : <Eye size={18} />}</button>
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <button onClick={handleConnectRepo} disabled={isVerifying} className="py-4 bg-white text-black font-black rounded-2xl uppercase tracking-widest text-[11px] hover:bg-gray-200 transition-all disabled:opacity-50">
+                <button onClick={handleConnectRepo} disabled={isVerifying} className="py-4 bg-white text-black font-black rounded-2xl uppercase text-[11px] disabled:opacity-50">
                   {isVerifying ? <RefreshCw className="animate-spin mx-auto" /> : 'Verificar Conexão'}
                 </button>
-                <button 
-                  onClick={handleFullProjectSync}
-                  disabled={!repoData || isFullSyncing}
-                  className="py-4 bg-blue-600 text-white font-black rounded-2xl uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 hover:bg-blue-700 transition-all shadow-xl shadow-blue-500/20 disabled:opacity-50"
-                >
+                <button onClick={handleFullProjectSync} disabled={!repoData || isFullSyncing} className="py-4 bg-blue-600 text-white font-black rounded-2xl uppercase text-[11px] flex items-center justify-center gap-3 disabled:opacity-50">
                   {isFullSyncing ? <RefreshCw className="animate-spin" /> : <Zap size={18} fill="white" />}
-                  {isFullSyncing ? 'Enviando...' : 'Sincronizar Tudo (Deploy)'}
+                  Sincronizar & Corrigir Actions
                 </button>
               </div>
             </div>
@@ -323,69 +308,33 @@ jobs:
 
           {activeTab === 'mobile' && (
             <div className="space-y-8 animate-in slide-in-from-right-4">
-              <div className="bg-[#111] border border-gray-800 rounded-[2.5rem] p-10 space-y-8 shadow-2xl overflow-hidden relative">
-                <div className="absolute top-0 right-0 p-10 opacity-10 rotate-12 text-emerald-500">
-                  <Smartphone size={160} />
-                </div>
+              <div className="bg-[#111] border border-gray-800 rounded-[2.5rem] p-10 space-y-8 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-10 opacity-10 text-emerald-500"><Smartphone size={160} /></div>
                 
-                <div className="relative z-10">
-                  <h3 className="text-2xl font-black flex items-center gap-3 text-white"><Package className="text-emerald-500" /> APK no GitHub Actions</h3>
-                  <p className="text-gray-400 text-sm mt-2 leading-relaxed italic">
-                    Gere seu APK automaticamente nos servidores do GitHub sem precisar instalar nada no seu computador.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-                  <div className="p-6 bg-black/40 border border-gray-800 rounded-3xl space-y-4">
-                    <div className="flex items-center gap-3 text-blue-400 font-black text-xs uppercase tracking-widest">
-                      <ShieldCheck size={16} /> Status Integração
-                    </div>
-                    <ul className="space-y-3">
-                      <li className="flex items-center justify-between text-[11px] font-bold">
-                        <span className="text-gray-500">GitHub Conectado</span>
-                        {repoData ? <CheckCircle2 size={14} className="text-emerald-500" /> : <X size={14} className="text-red-500" />}
-                      </li>
-                      <li className="flex items-center justify-between text-[11px] font-bold">
-                        <span className="text-gray-500">Workflow de APK</span>
-                        <CheckCircle2 size={14} className="text-emerald-500 opacity-50" />
-                      </li>
-                      <li className="flex items-center justify-between text-[11px] font-bold">
-                        <span className="text-gray-500">Permissão Write</span>
-                        {token ? <CheckCircle2 size={14} className="text-emerald-500" /> : <X size={14} className="text-red-500" />}
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="p-6 bg-emerald-900/10 border border-emerald-500/20 rounded-3xl flex flex-col justify-center gap-3">
-                    <h4 className="text-sm font-black text-white">Geração Automática</h4>
-                    <p className="text-[10px] text-emerald-400/70 font-bold uppercase tracking-widest leading-relaxed">
-                      Utilizamos o PWABuilder Action para converter o seu site em um binário Android assinado.
-                    </p>
-                  </div>
+                <h3 className="text-2xl font-black flex items-center gap-3 text-white"><Package className="text-emerald-500" /> APK Corrigido</h3>
+                
+                <div className="bg-amber-900/10 border border-amber-500/20 p-6 rounded-3xl flex gap-4 items-start">
+                   <AlertCircle className="text-amber-500 flex-shrink-0" />
+                   <div className="space-y-1">
+                      <p className="text-xs font-black text-white">Importante!</p>
+                      <p className="text-[10px] text-gray-500 leading-relaxed">
+                         O build falhou porque a Action `pwa-auth` não existia. Atualizamos o sistema para usar a **pwa-starter-action@v1.3**. 
+                         É obrigatório clicar em <strong>"Sincronizar & Corrigir"</strong> na aba Hospedagem antes de gerar o APK novamente.
+                      </p>
+                   </div>
                 </div>
 
                 <div className="bg-gradient-to-br from-emerald-600/10 to-emerald-900/20 border border-emerald-500/30 p-8 rounded-3xl space-y-6 relative z-10">
-                   <div className="flex items-center gap-4">
-                     <div className="p-4 bg-emerald-600 text-white rounded-2xl shadow-lg">
-                       <Play size={20} fill="white" />
-                     </div>
-                     <div>
-                       <h4 className="font-black text-white">Disparar Build Remota</h4>
-                       <p className="text-[10px] text-emerald-300 font-bold uppercase tracking-widest">Execute o pipeline de compilação agora</p>
-                     </div>
-                   </div>
-                   
                    <button 
                     onClick={handleTriggerApkBuild}
                     disabled={!repoData || isBuildingApk}
-                    className="w-full py-5 bg-emerald-600 text-white font-black rounded-2xl uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3 hover:bg-emerald-500 transition-all shadow-xl shadow-emerald-600/20 disabled:opacity-50"
+                    className="w-full py-5 bg-emerald-600 text-white font-black rounded-2xl uppercase text-xs flex items-center justify-center gap-3 shadow-xl disabled:opacity-50 hover:bg-emerald-500 transition-all"
                    >
                      {isBuildingApk ? <RefreshCw className="animate-spin" /> : <Cpu size={18} />}
-                     {isBuildingApk ? 'Processando Solicitação...' : 'Gerar APK no GitHub'}
+                     Gerar Novo APK (Correção Ativada)
                    </button>
-                   
                    <p className="text-center text-[9px] text-emerald-500/60 font-bold uppercase tracking-widest">
-                     Após disparar, seu APK aparecerá como 'Artifact' na aba Actions do GitHub.
+                     Isso enviará o sinal de build para o script corrigido no seu repositório.
                    </p>
                 </div>
               </div>
