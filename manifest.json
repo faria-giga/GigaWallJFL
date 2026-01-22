@@ -3,53 +3,37 @@
   "name": "Giga Wall JFL",
   "short_name": "Giga JFL",
   "description": "Plataforma digital independente de conteúdos multimédia.",
-  "start_url": ".",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
-  "package_name": "com.gigawalljfl.win",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait",
+  "scope": "./",
+  "lang": "pt-BR",
   "icons": [
-    {
-      "src": "https://picsum.photos/seed/icon72/72/72",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
-      "src": "https://picsum.photos/seed/icon96/96/96",
-      "sizes": "96x96",
-      "type": "image/png"
-    },
-    {
-      "src": "https://picsum.photos/seed/icon128/128/128",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
     {
       "src": "https://picsum.photos/seed/icon192/192/192",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "https://picsum.photos/seed/icon512/512/512",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "shortcuts": [
     {
       "name": "Vídeos",
-      "url": "/?view=videos",
+      "url": "./?view=videos",
       "icons": [{ "src": "https://picsum.photos/seed/vshort/96/96", "sizes": "96x96" }]
     },
     {
       "name": "Imagens",
-      "url": "/?view=images",
+      "url": "./?view=images",
       "icons": [{ "src": "https://picsum.photos/seed/ishort/96/96", "sizes": "96x96" }]
-    },
-    {
-      "name": "Arquivos",
-      "url": "/?view=files",
-      "icons": [{ "src": "https://picsum.photos/seed/fshort/96/96", "sizes": "96x96" }]
     }
   ]
 }
