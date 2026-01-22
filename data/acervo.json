@@ -1,0 +1,84 @@
+[
+  {
+    "id": "c1",
+    "title": "Cinematic Drone 4K",
+    "description": "Um vídeo incrível sobrevoando montanhas.",
+    "type": "video",
+    "creatorId": "2",
+    "thumbnail": "https://picsum.photos/seed/vid1/400/225",
+    "url": "#",
+    "views": 12500,
+    "likes": 840,
+    "downloads": 45,
+    "createdAt": "2023-10-01",
+    "tags": [
+      "4k",
+      "drone",
+      "nature"
+    ],
+    "category": "Natureza",
+    "ageRestricted": false
+  },
+  {
+    "id": "c2",
+    "title": "Neon Cyberpunk Wallpaper",
+    "description": "Ilustração digital em alta resolução.",
+    "type": "image",
+    "creatorId": "2",
+    "thumbnail": "https://picsum.photos/seed/img1/400/400",
+    "url": "#",
+    "views": 45000,
+    "likes": 3200,
+    "downloads": 12000,
+    "createdAt": "2023-11-15",
+    "tags": [
+      "cyberpunk",
+      "wallpaper",
+      "art"
+    ],
+    "category": "Arte Digital",
+    "ageRestricted": false
+  },
+  {
+    "id": "c3",
+    "title": "Essential Toolkit v2.0",
+    "description": "Conjunto de ferramentas para desenvolvedores.",
+    "type": "file",
+    "creatorId": "1",
+    "thumbnail": "https://picsum.photos/seed/file1/400/225",
+    "url": "#",
+    "views": 5600,
+    "likes": 120,
+    "downloads": 3400,
+    "createdAt": "2023-12-05",
+    "tags": [
+      "tools",
+      "dev",
+      "zip"
+    ],
+    "category": "Software",
+    "ageRestricted": false,
+    "version": "2.0.1",
+    "changelog": "Fixing bugs and adding dark mode support.",
+    "requirements": "Windows 10+, 8GB RAM"
+  },
+  {
+    "id": "c4",
+    "title": "Urban Exploration Series",
+    "description": "Fotos proibidas de locais abandonados.",
+    "type": "image",
+    "creatorId": "2",
+    "thumbnail": "https://picsum.photos/seed/urb/400/300",
+    "url": "#",
+    "views": 8900,
+    "likes": 450,
+    "downloads": 89,
+    "createdAt": "2024-01-20",
+    "tags": [
+      "urban",
+      "abandoned"
+    ],
+    "category": "Fotografia",
+    "ageRestricted": true
+  }
+]
