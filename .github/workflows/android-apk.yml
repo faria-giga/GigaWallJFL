@@ -11,9 +11,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build Android APK
-        uses: pwa-builder/pwa-starter-action@v1.3
+        uses: pwa-builder/pwa-action@v1
         with:
-          pwa-url: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          url: "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
           android-package-id: "com.jfl.gigawall"
           android-app-name: "Giga Wall JFL"
       - name: Upload APK Artifact
