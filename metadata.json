@@ -1,0 +1,8 @@
+{
+  "name": "Giga Wall JFL",
+  "description": "Plataforma digital independente para publicação, gestão e distribuição de conteúdos multimédia e arquivos digitais.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
